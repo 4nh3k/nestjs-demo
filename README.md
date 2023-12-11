@@ -33,7 +33,7 @@ $ npm install
 ```
 
 ## Running the app
-
+Before running the project, make sure to create a .env file in the root directory. You can find an example in .env.example.
 ```bash
 # development
 $ npm run start
