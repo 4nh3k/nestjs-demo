@@ -17,6 +17,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AccessTokenGuard } from 'src/guard/accessToken.guard';
 import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 import { HttpExceptionFilter } from 'src/filter/http-exception.filter';
+import { UserSerializationInterceptor } from 'src/interceptors/user-serialization.interceptor';
+import { IDValidationPipe } from 'src/pipe/id-validation.pipe';
 
 @Controller('users')
 @ApiTags('users')
@@ -32,24 +34,29 @@ export class UsersController {
   }
 
   @Get()
+  @UseInterceptors(UserSerializationInterceptor)
   findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  findById(@Param('id') id: string) {
+  @UseInterceptors(UserSerializationInterceptor)
+  findById(@Param('id', IDValidationPipe) id: string) {
     return this.usersService.findById(id);
   }
 
   @UseGuards(AccessTokenGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(
+    @Param('id', IDValidationPipe) id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @UseGuards(AccessTokenGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', IDValidationPipe) id: string) {
     return this.usersService.remove(id);
   }
 }

@@ -9,7 +9,6 @@ async function bootstrap() {
     .setTitle('NestJs example')
     .setDescription('This is a NestJs example')
     .setVersion('1.0')
-    .addTag('cats')
     .addTag('auth')
     .addTag('users')
     .addBearerAuth()
